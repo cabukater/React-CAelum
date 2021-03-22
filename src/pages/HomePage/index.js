@@ -81,6 +81,6 @@ class HomePage extends Component {
             </Fragment>
         );
     }
-}
+};
 
 export default HomePage;
