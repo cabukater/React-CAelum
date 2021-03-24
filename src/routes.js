@@ -1,41 +1,36 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import { Redirect } from 'react-router-dom'
-//	Páginas
+import { Switch, Route, Redirect } from "react-router-dom";
+
+// Páginas
 import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/NotFoundPage";
-
 import LoginPage from "./pages/LoginPage";
-class Roteamento extends React.Component {
-    render() {
-        return (
-            <Switch>
-                <Route path="/" component={HomePage} exact />
-                <Route path="/login" component={LoginPage} />
-                <Route	component={NotFoundPage}	/>
-            </Switch>
-        );
-    }
-
-}
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 class PrivateRoute extends React.Component {
-    estaAutenticado = () => {
-        if (localStorage.getItem('TOKEN')) {
-            return true
-        } else {
-            return false
-        }
-    }
+  estaAutenticado = () => {
+    return localStorage.getItem("TOKEN")
+  }
 
-    render() {
-        const { component: Component, ...props } = this.props
-        if (this.estaAutenticado()) {
-            return <Component	{...props} />
-        } else {
-            return <Redirect to="/loginPage" />
-        }
+  render() {
+    const { component: ComponenteQueVeioNoParametro, ...props } = this.props
+    if (this.estaAutenticado()) {
+      return <ComponenteQueVeioNoParametro {...props} />
+    } else {
+      return <Redirect to="/login" />
     }
+  }
+}
+
+class Roteamento extends React.Component {
+  render() {
+    return (
+      <Switch>
+        <PrivateRoute path="/" component={HomePage} exact />
+        <Route path="/login" component={LoginPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
+    );
+  }
 }
 
 export default Roteamento;
